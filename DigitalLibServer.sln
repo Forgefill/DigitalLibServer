@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DigitalLibServer", "DigitalLibServer\DigitalLibServer.csproj", "{D4F40D1D-A1E0-4359-B98F-AEFE36D9A0CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D4F40D1D-A1E0-4359-B98F-AEFE36D9A0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F40D1D-A1E0-4359-B98F-AEFE36D9A0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F40D1D-A1E0-4359-B98F-AEFE36D9A0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F40D1D-A1E0-4359-B98F-AEFE36D9A0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {28F942D6-023F-4CB6-B938-DCFDA4AC81DE}
+	EndGlobalSection
+EndGlobal
