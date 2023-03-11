@@ -1,6 +1,6 @@
 ﻿
 
-namespace DigitalLibServer.Model.Entities
+namespace DAL.Model.Entities
 {
     public class BookGenre:BaseEntity
     {

@@ -1,6 +1,4 @@
-﻿using DigitalLibServer.Model.Entities;
-
-namespace DigitalLibServer.Model.ViewModel
+﻿namespace BLL.Model
 {
     public class LoginModel
     {

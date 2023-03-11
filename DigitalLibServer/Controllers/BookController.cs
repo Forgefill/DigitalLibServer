@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalLibServer.Controllers
@@ -7,5 +8,13 @@ namespace DigitalLibServer.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
+        [HttpGet]
+        [Route("getString")]
+        [Authorize(Roles = "Moderator")]
+        public ActionResult getString()
+        {
+
+            return Ok("You are admin");
+        }
     }
 }
