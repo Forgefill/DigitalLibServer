@@ -1,9 +1,9 @@
 ﻿
-namespace DigitalLibServer.Model.Entities
+namespace DAL.Model.Entities
 {
     public class Book:BaseEntity
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
 
         public string? Description { get; set; }
 
