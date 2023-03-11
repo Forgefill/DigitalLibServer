@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DigitalLibServer.Model.Entities;
+using DAL.Model.Entities;
+using Microsoft.Extensions.Configuration;
 
-namespace DigitalLibServer.Model.DataContext
+namespace DAL.Data
 {
     public class LibDbContext : DbContext
     {
@@ -35,25 +36,26 @@ namespace DigitalLibServer.Model.DataContext
             optionsBuilder.UseOracle(_configuration.GetConnectionString("OracleLocal"));
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
-            modelBuilder.Entity<User>(entity => 
-                            { 
+            modelBuilder.Entity<User>(entity =>
+                            {
                                 entity.HasKey(x => x.Id);
                                 entity.Property(p => p.Login).IsRequired().HasColumnType("nvarchar2(50)");
                                 entity.Property(p => p.Password).IsRequired().HasColumnType("nvarchar2(100)");
                                 entity.Property(p => p.Role).IsRequired().HasColumnType("nvarchar2(14)");
-                                entity.HasIndex(e => e.Login).IsUnique(); 
-                                entity.HasIndex(e=>e.Password).IsUnique();
+                                entity.HasIndex(e => e.Login).IsUnique();
+                                entity.HasIndex(e => e.Password).IsUnique();
                             });
 
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.ToTable("Books");
                 entity.HasKey(x => x.Id);
-                entity.Property(p => p.Name).IsRequired().HasColumnType("nvarchar2(100)");
+                entity.Property(p => p.Title).IsRequired().HasColumnType("nvarchar2(100)");
                 entity.Property(p => p.Description).IsRequired().HasColumnType("nvarchar2(1000)");
-                entity.HasOne(a => a.Author).WithMany(a => a.Books).HasForeignKey(s=>s.AuthorId);
+                entity.HasOne(a => a.Author).WithMany(a => a.Books).HasForeignKey(s => s.AuthorId);
             });
 
             modelBuilder.Entity<Tag>(entity =>
@@ -82,7 +84,7 @@ namespace DigitalLibServer.Model.DataContext
                 entity.HasKey(x => x.Id);
                 entity.Property(p => p.TagId).IsRequired();
                 entity.Property(p => p.BookId).IsRequired();
-                entity.HasOne(a => a.Book).WithMany(t=>t.BookTags).HasForeignKey(f => f.BookId);
+                entity.HasOne(a => a.Book).WithMany(t => t.BookTags).HasForeignKey(f => f.BookId);
                 entity.HasOne(a => a.Tag).WithMany(t => t.BookTags).HasForeignKey(f => f.TagId);
             });
 
@@ -98,17 +100,17 @@ namespace DigitalLibServer.Model.DataContext
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasKey(x => x.Id);
-                entity.Property(p=>p.Likes).HasDefaultValue(0);
-                entity.Property(p=>p.Content).IsRequired().HasColumnType("nvarchar2(500)");
-                entity.HasOne(x=>x.User).WithMany(c=>c.Comments).HasForeignKey(f => f.UserId).IsRequired();
-                entity.HasOne(x=>x.Chapter).WithMany(c=>c.Comments).HasForeignKey(f=>f.ChapterId).IsRequired();
+                entity.Property(p => p.Likes).HasDefaultValue(0);
+                entity.Property(p => p.Content).IsRequired().HasColumnType("nvarchar2(500)");
+                entity.HasOne(x => x.User).WithMany(c => c.Comments).HasForeignKey(f => f.UserId).IsRequired();
+                entity.HasOne(x => x.Chapter).WithMany(c => c.Comments).HasForeignKey(f => f.ChapterId).IsRequired();
             });
 
             modelBuilder.Entity<Review>(entity =>
             {
                 entity.HasKey(x => x.Id);
                 entity.Property(p => p.Likes).HasDefaultValue(0);
-                entity.Property(p=>p.Score).HasDefaultValue(5).IsRequired();
+                entity.Property(p => p.Score).HasDefaultValue(5).IsRequired();
                 entity.Property(p => p.Content).IsRequired().HasColumnType("NCLOB");
                 entity.HasOne(x => x.User).WithMany(c => c.Reviews).HasForeignKey(f => f.UserId).IsRequired();
                 entity.HasOne(x => x.Book).WithMany(c => c.Reviews).HasForeignKey(f => f.BookId).IsRequired();

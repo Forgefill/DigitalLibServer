@@ -1,7 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace DigitalLibServer.JWTAuth
+
+namespace BLL.JWTAuth
 {
     public class AuthOptions
     {
