@@ -33,18 +33,19 @@ namespace DAL.Migrations
                         .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
+                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar2(1000)");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar2(100)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("DAL.Model.Entities.BookGenre", b =>
@@ -113,6 +114,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar2(100)");
 
                     b.HasKey("Id");
@@ -135,12 +137,11 @@ namespace DAL.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasMaxLength(500)
                         .HasColumnType("nvarchar2(500)");
 
                     b.Property<int>("Likes")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)")
-                        .HasDefaultValue(0);
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("NUMBER(10)");
@@ -164,7 +165,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar2(100)");
 
                     b.HasKey("Id");
 
@@ -187,14 +189,10 @@ namespace DAL.Migrations
                         .HasColumnType("NCLOB");
 
                     b.Property<int>("Likes")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)")
-                        .HasDefaultValue(0);
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<int>("Score")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)")
-                        .HasDefaultValue(5);
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("NUMBER(10)");
@@ -218,7 +216,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar2(100)");
 
                     b.HasKey("Id");
 
@@ -233,24 +232,32 @@ namespace DAL.Migrations
 
                     OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Login")
+                    b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar2(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar2(100)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar2(14)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar2(15)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar2(50)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Login")
+                    b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Password")
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users");

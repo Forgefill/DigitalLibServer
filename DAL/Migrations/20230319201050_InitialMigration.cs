@@ -16,7 +16,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Name = table.Column<string>(type: "nvarchar2(50)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar2(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Name = table.Column<string>(type: "nvarchar2(50)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar2(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,9 +42,10 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Login = table.Column<string>(type: "nvarchar2(50)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar2(100)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar2(14)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar2(50)", maxLength: 50, nullable: false),
+                    Username = table.Column<string>(type: "nvarchar2(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar2(100)", maxLength: 100, nullable: false),
+                    Role = table.Column<string>(type: "nvarchar2(15)", maxLength: 15, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,8 +58,8 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Title = table.Column<string>(type: "nvarchar2(100)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar2(1000)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar2(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar2(1000)", maxLength: 1000, nullable: true),
                     AuthorId = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
@@ -130,7 +131,7 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    Title = table.Column<string>(type: "nvarchar2(100)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar2(100)", maxLength: 100, nullable: false),
                     Content = table.Column<string>(type: "NCLOB", nullable: false),
                     ChapterNum = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     BookId = table.Column<int>(type: "NUMBER(10)", nullable: false)
@@ -155,8 +156,8 @@ namespace DAL.Migrations
                     UserId = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     BookId = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     Content = table.Column<string>(type: "NCLOB", nullable: false),
-                    Score = table.Column<int>(type: "NUMBER(10)", nullable: false, defaultValue: 5),
-                    Likes = table.Column<int>(type: "NUMBER(10)", nullable: false, defaultValue: 0)
+                    Score = table.Column<int>(type: "NUMBER(10)", nullable: false),
+                    Likes = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -183,8 +184,8 @@ namespace DAL.Migrations
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     UserId = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     ChapterId = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar2(500)", nullable: false),
-                    Likes = table.Column<int>(type: "NUMBER(10)", nullable: false, defaultValue: 0)
+                    Content = table.Column<string>(type: "nvarchar2(500)", maxLength: 500, nullable: false),
+                    Likes = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -254,15 +255,15 @@ namespace DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Login",
+                name: "IX_Users_Email",
                 table: "Users",
-                column: "Login",
+                column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Password",
+                name: "IX_Users_Username",
                 table: "Users",
-                column: "Password",
+                column: "Username",
                 unique: true);
         }
 

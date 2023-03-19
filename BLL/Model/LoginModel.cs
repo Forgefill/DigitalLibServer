@@ -1,8 +1,11 @@
-﻿namespace BLL.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BLL.Model
 {
     public class LoginModel
-    {
-        public string Login { get; set; }
+    { 
+        [EmailAddress]
+        public string Email { get; set; }
 
         public string Password { get; set; }
     }

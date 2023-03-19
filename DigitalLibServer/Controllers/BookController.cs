@@ -13,7 +13,6 @@ namespace DigitalLibServer.Controllers
         [Authorize(Roles = "Moderator")]
         public ActionResult getString()
         {
-
             return Ok("You are admin");
         }
     }
