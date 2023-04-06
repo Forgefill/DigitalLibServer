@@ -4,6 +4,7 @@ using DAL.Model.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using BLL.Model;
 
 namespace BLL.Services
 {
@@ -12,7 +13,7 @@ namespace BLL.Services
 
         public AuthService() { }
 
-        public object GenerateToken(User user)
+        public object GenerateToken(UserModel user)
         {
             var claims = new List<Claim> {
             new Claim(ClaimTypes.Email, user.Email),

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BLL.Model;
+using BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BLL.Interfaces;
 
 namespace DigitalLibServer.Controllers
 {
@@ -8,12 +11,43 @@ namespace DigitalLibServer.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        [HttpGet]
-        [Route("getString")]
-        [Authorize(Roles = "Moderator")]
-        public ActionResult getString()
+        private readonly IBookService bookService;
+
+        public BookController(IBookService _bookService) 
         {
-            return Ok("You are admin");
+            bookService = _bookService;
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            var booksOperation = await bookService.GetAllBooksAsync();
+
+            if (!booksOperation.IsSuccess)
+            {
+                return BadRequest(booksOperation.Errors);
+            }
+            else
+            {
+                return Ok(booksOperation.Entity);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetBookByTitle(string title)
+        {
+            var bookOperation = await bookService.GetBookByTitleAsync(title);
+
+            if (!bookOperation.IsSuccess)
+            {
+                return BadRequest(bookOperation.Errors);
+            }
+
+            return Ok(bookOperation.Entity);
+        }
+
+
     }
 }

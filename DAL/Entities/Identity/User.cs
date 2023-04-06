@@ -35,6 +35,7 @@ namespace DAL.Model.Entities
             Comments= new HashSet<Comment>();
             Books = new HashSet<Book>();
             Reviews= new HashSet<Review>();
+            Role = "user";
         }
     }
 }
