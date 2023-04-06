@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
-    internal interface IBookService
+    public interface IBookService
     {
         Task<OperationResult<List<BookModel>>> GetAllBooksAsync();
+
+        Task<OperationResult<BookModel>> GetBookByTitleAsync(string title);
 
     }
 }

@@ -11,6 +11,8 @@ namespace BLL
             CreateMap<RegisterModel, User>();
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
+            CreateMap<Book, BookModel>();
+            CreateMap<BookModel, Book>();
         }
     }
 }

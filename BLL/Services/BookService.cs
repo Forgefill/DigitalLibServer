@@ -34,5 +34,18 @@ namespace BLL.Services
                 return OperationResult<List<BookModel>>.Failture(ex.Message);
             }
         }
+
+        public async Task<OperationResult<BookModel>> GetBookByTitleAsync(string title)
+        {
+            try
+            {
+                var book = await context.Books.FirstAsync(x => x.Title == title);
+                return OperationResult<BookModel>.Success(mapper.Map<BookModel>(book));
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<BookModel>.Failture(ex.Message);
+            }
+        }
     }
 }
