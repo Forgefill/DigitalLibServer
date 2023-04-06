@@ -1,0 +1,15 @@
+﻿using BLL.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Interfaces
+{
+    internal interface IBookService
+    {
+        Task<OperationResult<List<BookModel>>> GetAllBooksAsync();
+
+    }
+}

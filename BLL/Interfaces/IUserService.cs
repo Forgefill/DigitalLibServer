@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAL.Data;
-using DAL.Model.Entities;
+﻿using BLL.Model;
 
 namespace BLL.Interfaces
 {
     public interface IUserService
     {
-        Task<User?> GetUserAsync(string email, string password);
+        Task<OperationResult<UserModel>> GetUserAsync(string email, string password);
 
-        Task<List<User>> GetAllUsersAsync();
+        Task<OperationResult<List<UserModel>>> GetAllUsersAsync();
+
+        Task<OperationResult<UserModel>> GetUserByEmailAsync(string email);
+
+        Task<OperationResult<UserModel>> RegisterUserAsync(RegisterModel user);
+
     }
 }
