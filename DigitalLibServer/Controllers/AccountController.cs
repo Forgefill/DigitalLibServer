@@ -13,6 +13,7 @@ using System.Security.Claims;
 namespace DigitalLibServer.Controllers
 {
     [Route("[controller]")]
+    [AllowAnonymous]
     [ApiController]
     public class AccountController : ControllerBase
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DAL.Model.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
 namespace DAL.Data
 {
@@ -9,11 +10,7 @@ namespace DAL.Data
 
         public virtual DbSet<Book> Books { get; set; }
 
-        public virtual DbSet<Tag> Tags { get; set; }
-
         public virtual DbSet<Genre> Genres { get; set; }
-
-        public virtual DbSet<BookTag> BookTags { get; set; }
 
         public virtual DbSet<BookGenre> BookGenres { get; set; }
 
@@ -33,12 +30,11 @@ namespace DAL.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseOracle(_configuration.GetConnectionString("OracleLocal"));
+            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("MSSQLSERVER"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(e => e.Email).IsUnique();
@@ -55,12 +51,6 @@ namespace DAL.Data
                 entity.HasOne(a => a.Book).WithMany(c => c.Chapters).HasForeignKey(f => f.BookId);
             });
 
-            modelBuilder.Entity<BookTag>(entity =>
-            {
-                entity.HasOne(a => a.Book).WithMany(t => t.BookTags).HasForeignKey(f => f.BookId);
-                entity.HasOne(a => a.Tag).WithMany(t => t.BookTags).HasForeignKey(f => f.TagId);
-            });
-
             modelBuilder.Entity<BookGenre>(entity =>
             {
                 entity.HasOne(a => a.Book).WithMany(t => t.BookGenres).HasForeignKey(f => f.BookId);
@@ -69,15 +59,16 @@ namespace DAL.Data
 
             modelBuilder.Entity<Comment>(entity =>
             {
-                entity.HasOne(x => x.User).WithMany(c => c.Comments).HasForeignKey(f => f.UserId).IsRequired();
-                entity.HasOne(x => x.Chapter).WithMany(c => c.Comments).HasForeignKey(f => f.ChapterId).IsRequired();
+                entity.HasOne(x => x.User).WithMany(c => c.Comments).HasForeignKey(f => f.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(x => x.Chapter).WithMany(c => c.Comments).HasForeignKey(f => f.ChapterId).IsRequired().OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Review>(entity =>
             {
-                entity.HasOne(x => x.User).WithMany(c => c.Reviews).HasForeignKey(f => f.UserId).IsRequired();
-                entity.HasOne(x => x.Book).WithMany(c => c.Reviews).HasForeignKey(f => f.BookId).IsRequired();
+                entity.HasOne(x => x.User).WithMany(c => c.Reviews).HasForeignKey(f => f.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+                entity.HasOne(x => x.Book).WithMany(c => c.Reviews).HasForeignKey(f => f.BookId).IsRequired().OnDelete(DeleteBehavior.NoAction);
             });
+
         }
     }
 }

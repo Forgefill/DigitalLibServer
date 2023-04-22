@@ -9,8 +9,8 @@ namespace DAL
     {
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            string connection = configuration.GetConnectionString("OracleLocal");
-            services.AddDbContext<LibDbContext>(options => options.UseOracle(connection));
+            string connection = configuration.GetConnectionString("MSSQLSERVER");
+            services.AddDbContext<LibDbContext>(options => options.UseSqlServer(connection));
         }
     }
 }

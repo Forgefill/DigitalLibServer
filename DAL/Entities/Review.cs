@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,14 +7,16 @@ namespace DAL.Model.Entities
 {
     public class Review:BaseEntity
     {
+        [Required]
         public int UserId { get; set; }
         public virtual User User { get; set; }
 
+        [Required]
         public int BookId { get; set; }
         public virtual Book Book { get; set; }
 
         [Required]
-        [Column(TypeName ="NCLOB")]
+        [Column(TypeName ="nvarchar(max)")]
         public string Content { get; set; }
 
         [Required]

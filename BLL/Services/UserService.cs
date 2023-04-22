@@ -82,9 +82,9 @@ namespace BLL.Services
             User user = _mapper.Map<User>(registerModel);
             try
             {
-                var addedUser = await context.Users.AddAsync(user);
+                await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
-                var userModel = _mapper.Map<UserModel>(addedUser);
+                var userModel = _mapper.Map<UserModel>(registerModel);
                 return OperationResult<UserModel>.Success(userModel);
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Model.Entities
@@ -7,10 +8,10 @@ namespace DAL.Model.Entities
     {
         [Required]
         [MaxLength(100)]
-        [Column(TypeName = "nvarchar2(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         public string Title { get; set; }
 
-        [Column(TypeName = "NCLOB")]
+        [Column(TypeName = "nvarchar(max)")]
         public string Content { get; set; }
 
         [Required]

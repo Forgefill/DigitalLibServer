@@ -8,7 +8,7 @@ namespace DAL.Model.Entities
     {
         [Required]
         [MaxLength(100)]
-        [Column(TypeName = "nvarchar2(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
 
         public virtual ICollection<BookGenre> BookGenres { get; set; }
