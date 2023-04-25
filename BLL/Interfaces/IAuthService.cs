@@ -5,6 +5,6 @@ namespace BLL.Interfaces
     public interface IAuthService
     {
 
-        public object GenerateToken(UserModel user);
+        public string GenerateToken(UserModel user);
     }
 }

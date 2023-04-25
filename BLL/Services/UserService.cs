@@ -3,9 +3,10 @@ using BLL.Interfaces;
 using BLL.Model;
 using BLL.Validators;
 using DAL.Data;
-using DAL.Model.Entities;
+using DAL.Entities;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BLL.Services
 {
@@ -13,14 +14,14 @@ namespace BLL.Services
     {
         private LibDbContext context;
 
-        private ValidationRepo _validators;
+        private ValidatorRepo _validators;
 
         private IMapper _mapper;
 
-        public UserService(LibDbContext libDbContext, IMapper mapper) 
+        public UserService(LibDbContext libDbContext, IMapper mapper, ValidatorRepo validators) 
         { 
             context = libDbContext;
-            _validators = new ValidationRepo();
+            _validators = validators;
             _mapper = mapper;
         }
 
@@ -74,9 +75,16 @@ namespace BLL.Services
                 return OperationResult<UserModel>.Failture(vr.Errors.Select(e=>e.ErrorMessage).ToArray());
             }
 
-            var userExist  = context.Users.FirstOrDefault(x => x.Email == registerModel.Email) != null;
-            if(userExist) {
+            var existingUserWithEmail = context.Users.FirstOrDefault(x => x.Email == registerModel.Email);
+            if (existingUserWithEmail != null)
+            {
                 return OperationResult<UserModel>.Failture("The email is used by another user");
+            }
+
+            var existingUserWithUsername = context.Users.FirstOrDefault(x => x.Username == registerModel.Username);
+            if (existingUserWithUsername != null)
+            {
+                return OperationResult<UserModel>.Failture("The username is used by another user");
             }
 
             User user = _mapper.Map<User>(registerModel);

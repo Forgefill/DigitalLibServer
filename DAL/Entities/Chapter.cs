@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAL.Model.Entities
+namespace DAL.Entities
 {
     public class Chapter:BaseEntity
     {
@@ -15,7 +15,7 @@ namespace DAL.Model.Entities
         public string Content { get; set; }
 
         [Required]
-        public int ChapterNum { get; set; }
+        public int ChapterNumber { get; set; }
 
         [Required]
         public int BookId { get; set; }

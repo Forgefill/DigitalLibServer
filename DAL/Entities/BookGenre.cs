@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DAL.Model.Entities
+namespace DAL.Entities
 {
     public class BookGenre:BaseEntity
     {

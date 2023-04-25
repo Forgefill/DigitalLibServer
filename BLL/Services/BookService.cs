@@ -22,29 +22,55 @@ namespace BLL.Services
             mapper = _mapper;
         }
 
-        public async Task<OperationResult<List<BookModel>>> GetAllBooksAsync()
+        public async Task<OperationResult<List<BookInfoModel>>> GetAllBooksInfoAsync()
         {
             try
             {
-                var books = await context.Books.ToListAsync();
-                return OperationResult<List<BookModel>>.Success(mapper.Map<List<BookModel>>(books));
+                var books = await context.Books.Include(c=>c.Reviews).ToListAsync();
+                return OperationResult<List<BookInfoModel>>.Success(mapper.Map<List<BookInfoModel>>(books));
             }
             catch (Exception ex)
             {
-                return OperationResult<List<BookModel>>.Failture(ex.Message);
+                return OperationResult<List<BookInfoModel>>.Failture(ex.Message);
             }
         }
 
-        public async Task<OperationResult<BookModel>> GetBookByTitleAsync(string title)
+        public async Task<OperationResult<BookInfoModel>> GetBookByTitleAsync(string title)
         {
             try
             {
-                var book = await context.Books.FirstAsync(x => x.Title == title);
+                var book = await context.Books.Include(c=>c.Reviews).FirstAsync(x => x.Title == title);
+                return OperationResult<BookInfoModel>.Success(mapper.Map<BookInfoModel>(book));
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<BookInfoModel>.Failture(ex.Message);
+            }
+        }
+
+        public async Task<OperationResult<BookModel>> GetBookByIdAsync(int bookId)
+        {
+            try
+            {
+                var book = await context.Books.FirstAsync(x => x.Id == bookId);
                 return OperationResult<BookModel>.Success(mapper.Map<BookModel>(book));
             }
             catch (Exception ex)
             {
                 return OperationResult<BookModel>.Failture(ex.Message);
+            }
+        }
+
+        public async Task<OperationResult<ImageModel>> GetImageAsync(int bookId)
+        {
+            try
+            {
+                var image = await context.Images.FirstAsync(x => x.BookId == bookId);
+                return OperationResult<ImageModel>.Success(mapper.Map<ImageModel>(image));
+            }
+            catch (Exception ex)
+            {
+                return OperationResult<ImageModel>.Failture(ex.Message);
             }
         }
     }

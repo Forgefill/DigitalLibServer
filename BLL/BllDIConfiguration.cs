@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
 using BLL.Interfaces;
 using BLL.Services;
+using BLL.Validators;
 
 namespace BLL
 {
@@ -16,8 +17,12 @@ namespace BLL
         {
             DalDIConfiguration.ConfigureServices(services, configuration);
 
+            services.AddScoped<RegisterValidator>();
+            services.AddScoped<ValidatorRepo>();
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
+            
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {

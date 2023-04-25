@@ -1,6 +1,5 @@
 ﻿using BLL.Interfaces;
 using BLL.JWTAuth;
-using DAL.Model.Entities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,7 +12,7 @@ namespace BLL.Services
 
         public AuthService() { }
 
-        public object GenerateToken(UserModel user)
+        public string GenerateToken(UserModel user)
         {
             var claims = new List<Claim> {
             new Claim(ClaimTypes.Email, user.Email),
@@ -28,7 +27,7 @@ namespace BLL.Services
                 claims: claimsIdentity.Claims,
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-            return new { token = new JwtSecurityTokenHandler().WriteToken(jwt), email = user.Email, role = user.Role, username = user.Username };
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }

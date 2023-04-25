@@ -3,7 +3,7 @@ using BLL.Interfaces;
 using BLL.JWTAuth;
 using BLL.Model;
 using BLL.Services;
-using DAL.Model.Entities;
+using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -34,13 +34,12 @@ namespace DigitalLibServer.Controllers
 
             if (!result.IsSuccess)
             {
-                return Unauthorized("Wrong login or password");
+                return Unauthorized(new { errors = new string[] { "Wrong login or password" } });
             }
-            else
-            {
-                var tokenObj = authService.GenerateToken(result.Entity);
-                return Ok(tokenObj);
-            }
+              
+            var tokenString = authService.GenerateToken(result.Entity);
+
+            return Ok(new { data = new { token = tokenString, username = result.Entity.Username, email = result.Entity.Email } });
         }
 
         [AllowAnonymous]
@@ -51,11 +50,11 @@ namespace DigitalLibServer.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(new {errors = result.Errors });
             }
 
-            var tokenObj = authService.GenerateToken(result.Entity);
-            return Ok(tokenObj);
+            var tokenResult = authService.GenerateToken(result.Entity);
+            return Ok(new {data = new {token = tokenResult, username = result.Entity.Username, email = result.Entity.Email } });
         }
 
     }

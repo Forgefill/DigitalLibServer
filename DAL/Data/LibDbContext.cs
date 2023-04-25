@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DAL.Model.Entities;
+using DAL.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using DAL.Entities;
 
 namespace DAL.Data
 {
@@ -19,6 +20,8 @@ namespace DAL.Data
         public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<Comment> Comments { get; set; }
+
+        public virtual DbSet<Image> Images { get; set; }
 
         IConfiguration _configuration { get; set; }
 
@@ -44,6 +47,7 @@ namespace DAL.Data
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.HasOne(a => a.Author).WithMany(a => a.Books).HasForeignKey(s => s.AuthorId);
+                entity.HasOne(i => i.Image).WithOne(b => b.Book).HasForeignKey<Image>(i => i.BookId);
             });
 
             modelBuilder.Entity<Chapter>(entity =>

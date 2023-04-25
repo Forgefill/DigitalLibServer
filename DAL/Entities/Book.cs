@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAL.Model.Entities
+namespace DAL.Entities
 {
     [Table("Books")]
     public class Book:BaseEntity
@@ -18,6 +19,9 @@ namespace DAL.Model.Entities
         public int AuthorId { get; set; }
         [ForeignKey(nameof(AuthorId))]
         public virtual User Author { get; set; }
+
+        public int? ImageId { get; set; }
+        public virtual Image Image { get; set; }
 
         public virtual ICollection<Chapter> Chapters { get; set; }  
         public virtual ICollection<BookGenre> BookGenres { get; set; }
