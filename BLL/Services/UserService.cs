@@ -6,13 +6,12 @@ using DAL.Data;
 using DAL.Entities;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BLL.Services
 {
     public class UserService: IUserService
     {
-        private LibDbContext context;
+        private LibDbContext _context;
 
         private ValidatorRepo _validators;
 
@@ -20,7 +19,7 @@ namespace BLL.Services
 
         public UserService(LibDbContext libDbContext, IMapper mapper, ValidatorRepo validators) 
         { 
-            context = libDbContext;
+            _context = libDbContext;
             _validators = validators;
             _mapper = mapper;
         }
@@ -29,7 +28,7 @@ namespace BLL.Services
         {
             try
             {
-                var user = await context.Users.FirstAsync(x => x.Email == email && x.Password == password);
+                var user = await _context.Users.FirstAsync(x => x.Email == email && x.Password == password);
                 var userModel = _mapper.Map<UserModel>(user);
                 
                 return OperationResult<UserModel>.Success(userModel);
@@ -44,7 +43,7 @@ namespace BLL.Services
         {
             try
             {
-               var users = await context.Users.ToListAsync();
+               var users = await _context.Users.ToListAsync();
 
                return OperationResult<List<UserModel>>.Success(_mapper.Map<List<UserModel>>(users));
             }
@@ -58,7 +57,7 @@ namespace BLL.Services
         {
             try
             {
-                var user = await context.Users.FirstAsync(x => x.Email == email);
+                var user = await _context.Users.FirstAsync(x => x.Email == email);
                 return OperationResult<UserModel>.Success(_mapper.Map<UserModel>(user));
             }
             catch (Exception ex)
@@ -69,29 +68,17 @@ namespace BLL.Services
 
         public async Task<OperationResult<UserModel>> RegisterUserAsync(RegisterModel registerModel)
         {
-            ValidationResult vr = _validators.registerValidator.Validate(registerModel);
+            ValidationResult validationResult = _validators.registerModelValidator.Validate(registerModel);
 
-            if(!vr.IsValid) {
-                return OperationResult<UserModel>.Failture(vr.Errors.Select(e=>e.ErrorMessage).ToArray());
+            if(!validationResult.IsValid) {
+                return OperationResult<UserModel>.Failture(validationResult.Errors.Select(e=>e.ErrorMessage).ToArray());
             }
 
-            var existingUserWithEmail = context.Users.FirstOrDefault(x => x.Email == registerModel.Email);
-            if (existingUserWithEmail != null)
-            {
-                return OperationResult<UserModel>.Failture("The email is used by another user");
-            }
-
-            var existingUserWithUsername = context.Users.FirstOrDefault(x => x.Username == registerModel.Username);
-            if (existingUserWithUsername != null)
-            {
-                return OperationResult<UserModel>.Failture("The username is used by another user");
-            }
-
-            User user = _mapper.Map<User>(registerModel);
-            try
-            {
-                await context.Users.AddAsync(user);
-                await context.SaveChangesAsync();
+            try 
+            { 
+                User user = _mapper.Map<User>(registerModel);
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
                 var userModel = _mapper.Map<UserModel>(registerModel);
                 return OperationResult<UserModel>.Success(userModel);
             }

@@ -61,6 +61,11 @@ namespace DAL.Data
                 entity.HasOne(a => a.Genre).WithMany(t => t.BookGenres).HasForeignKey(f => f.GenreId);
             });
 
+            modelBuilder.Entity<Genre>(entity =>
+            {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.HasOne(x => x.User).WithMany(c => c.Comments).HasForeignKey(f => f.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);

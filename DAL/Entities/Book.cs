@@ -16,6 +16,12 @@ namespace DAL.Entities
         [Column(TypeName = "nvarchar(1000)")]
         public string? Description { get; set; }
 
+        public int Views { get; set; }
+
+        public int Bookmarks { get; set; }
+
+        public bool isComplete { get; set; }
+
         public int AuthorId { get; set; }
         [ForeignKey(nameof(AuthorId))]
         public virtual User Author { get; set; }

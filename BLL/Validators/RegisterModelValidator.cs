@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Validators
 {
-    public class RegisterValidator:AbstractValidator<RegisterModel>
+    public class RegisterModelValidator:AbstractValidator<RegisterModel>
     {
         private readonly LibDbContext _context;
 
-        public RegisterValidator(LibDbContext context) 
+        public RegisterModelValidator(LibDbContext context) 
         { 
             _context = context;
 

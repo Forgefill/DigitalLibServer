@@ -8,11 +8,14 @@ namespace BLL.Validators
 {
     public class ValidatorRepo
     {
-        public RegisterValidator registerValidator { get; set; }
+        public RegisterModelValidator registerModelValidator { get; set; }
 
-        public ValidatorRepo(RegisterValidator regValidator) { 
-        
-            registerValidator = regValidator;
+        public GenreModelValidator genreModelValidator { get; set; }
+
+        public ValidatorRepo(RegisterModelValidator regValidator, GenreModelValidator genreValidator) {
+
+            genreModelValidator = genreValidator;
+            registerModelValidator = regValidator;
         }
     }
 }

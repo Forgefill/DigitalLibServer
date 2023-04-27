@@ -17,10 +17,12 @@ namespace BLL
         {
             DalDIConfiguration.ConfigureServices(services, configuration);
 
-            services.AddScoped<RegisterValidator>();
+            services.AddScoped<RegisterModelValidator>();
+            services.AddScoped<GenreModelValidator>();
             services.AddScoped<ValidatorRepo>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGenreService, GenreServices>();
             services.AddScoped<IAuthService, AuthService>();
             
 
