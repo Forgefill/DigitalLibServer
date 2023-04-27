@@ -11,8 +11,6 @@ namespace DAL.Data
 
         public virtual DbSet<Genre> Genres { get; set; }
 
-        public virtual DbSet<BookGenre> BookGenres { get; set; }
-
         public virtual DbSet<Chapter> Chapters { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
@@ -22,6 +20,8 @@ namespace DAL.Data
         public virtual DbSet<Review> Reviews { get; set; }
 
         public virtual DbSet<Image> Images { get; set; }
+
+        public virtual DbSet<BookGenre> BookGenres { get; set; }
 
         IConfiguration _configuration { get; set; }
 

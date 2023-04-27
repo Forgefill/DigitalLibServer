@@ -40,7 +40,7 @@ namespace BLL.Services
         {
             try
             {
-                var book = await _context.Books.Include(c=>c.Reviews).FirstAsync(x => x.Title == title);
+                var book = await _context.Books.FirstAsync(x => x.Title == title);
                 return OperationResult<BookModel>.Success(_mapper.Map<BookModel>(book));
             }
             catch (Exception ex)

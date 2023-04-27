@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BLL.Model;
 using BLL.Model.Book;
+using BLL.Model.Chapter;
+using BLL.Model.Comment;
 using BLL.Model.Review;
 using DAL.Entities;
 
@@ -23,8 +25,14 @@ namespace BLL
             CreateMap<Review, ReviewInfoModel>();
             CreateMap<ReviewModel, Review>();
 
+            CreateMap<Comment, CommentModel>();
+            CreateMap<CommentModel, Comment>();
+
             CreateMap<Genre, GenreModel>();
             CreateMap<GenreModel, Genre>();
+
+            CreateMap<Chapter, ChapterModel>();
+            CreateMap<ChapterModel, Chapter>();
         }
     }
 }

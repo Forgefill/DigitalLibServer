@@ -22,6 +22,8 @@ namespace BLL
             services.AddScoped<UpdateBookModelValidator>();
             services.AddScoped<CreateBookModelValidator>();
             services.AddScoped<ReviewModelValidator>();
+            services.AddScoped<CommentModelValidator>();
+            services.AddScoped<ChapterModelValidator>();
             services.AddScoped<ValidatorRepo>();
 
             services.AddScoped<IUserService, UserService>();
@@ -29,6 +31,8 @@ namespace BLL
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IChapterService, ChapterService>();
             
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
