@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Model
+namespace BLL.Model.Book
 {
     public class BookModel
     {
@@ -15,11 +15,16 @@ namespace BLL.Model
 
         public string? Description { get; set; }
 
+        public int Views { get; set; }
+
+        public int Bookmarks { get; set; }
+
+        public bool isCompleted { get; set; }
+
+        public double AverageScore { get; set; }
+
         public int AuthorId { get; set; }
-        public string AuthorUsername { get; set; }  
 
         public int? ImageId { get; set; }
-        
-        public double AverageScore { get; set; } = 0;
     }
 }

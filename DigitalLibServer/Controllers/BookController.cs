@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Interfaces;
+using BLL.Model.Book;
 
 namespace DigitalLibServer.Controllers
 {
@@ -18,11 +19,11 @@ namespace DigitalLibServer.Controllers
             bookService = _bookService;
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         [Authorize]
-        public async Task<IActionResult> GetAllBooksInfo()
+        public async Task<IActionResult> GetBookList()
         {
-            var booksOperation = await bookService.GetAllBooksInfoAsync();
+            var booksOperation = await bookService.GetBookListAsync();
 
             if (!booksOperation.IsSuccess)
             {
@@ -34,7 +35,7 @@ namespace DigitalLibServer.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/{bookId}")]
         [Authorize]
         public async Task<IActionResult> GetBookById(int bookId)
         {
@@ -50,7 +51,7 @@ namespace DigitalLibServer.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("/getByTitle")]
         [Authorize]
         public async Task<IActionResult> GetBookByTitle(string title)
         {
@@ -64,7 +65,7 @@ namespace DigitalLibServer.Controllers
             return Ok(new { data = bookOperation.Entity });
         }
 
-        [HttpGet]
+        [HttpGet("/image/{bookId}")]
         [Authorize]
         public async Task<IActionResult> GetImage(int bookId)
         {
@@ -78,6 +79,46 @@ namespace DigitalLibServer.Controllers
             return Ok(new { data = imageOperation.Entity });
         }
 
+        [HttpDelete("/delete/{bookId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            var bookOperation = await bookService.DeleteBookAsync(bookId);
 
+            if (!bookOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = bookOperation.Errors });
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("add")]
+        [Authorize]
+        public async Task<IActionResult> CreateBook(CreateBookModel createBookModel)
+        {
+            var bookOperation = await bookService.CreateBookAsync(createBookModel);
+
+            if (!bookOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = bookOperation.Errors });
+            }
+
+            return Ok(new {data = bookOperation.Entity});
+        }
+
+        [HttpPut("update/{bookId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBook(int bookId, UpdateBookModel updateBookModel)
+        {
+            var bookOperation = await bookService.UpdateBookAsync(bookId, updateBookModel);
+
+            if (!bookOperation.IsSuccess)
+            {
+                return BadRequest(new {errors = bookOperation.Errors});
+            }
+
+            return Ok(new { data = bookOperation.Entity });
+        }
     }
 }

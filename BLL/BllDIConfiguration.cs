@@ -19,11 +19,16 @@ namespace BLL
 
             services.AddScoped<RegisterModelValidator>();
             services.AddScoped<GenreModelValidator>();
+            services.AddScoped<UpdateBookModelValidator>();
+            services.AddScoped<CreateBookModelValidator>();
+            services.AddScoped<ReviewModelValidator>();
             services.AddScoped<ValidatorRepo>();
 
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IGenreService, GenreServices>();
+            services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IBookService, BookService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IReviewService, ReviewService>();
             
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Model;
+using BLL.Model.Book;
+using BLL.Model.Review;
 using DAL.Entities;
 
 namespace BLL
@@ -12,12 +14,14 @@ namespace BLL
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
             CreateMap<RegisterModel, UserModel>();
-
-            CreateMap<Book, BookInfoModel>().ForMember(x => x.AverageScore, opt => opt.MapFrom(src => src.Reviews.Average(c => c.Score)));
-            CreateMap<Book, BookModel>()
-                .ForMember(x => x.AverageScore, opt => opt.MapFrom(src => src.Reviews.Average(c => c.Score)))
-                .ForMember(x=>x.AuthorId, opt=>opt.MapFrom(src=>src.Author.Username));
+            
+            CreateMap<CreateBookModel, Book>();
+            CreateMap<UpdateBookModel, Book>();
+            CreateMap<Book, BookModel>();
             CreateMap<Image, ImageModel>();
+
+            CreateMap<Review, ReviewInfoModel>();
+            CreateMap<ReviewModel, Review>();
 
             CreateMap<Genre, GenreModel>();
             CreateMap<GenreModel, Genre>();

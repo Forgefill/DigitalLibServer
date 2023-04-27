@@ -16,7 +16,7 @@ namespace DAL.Entities
         public virtual Book Book { get; set; }
 
         [Required]
-        [Column(TypeName ="nvarchar(max)")]
+        [Column(TypeName ="nvarchar(5000)")]
         public string Content { get; set; }
 
         [Required]

@@ -16,8 +16,8 @@ namespace DAL.Entities
         public virtual Chapter Chapter { get; set; }
 
         [Required]
-        [MaxLength(500)]
-        [Column(TypeName ="nvarchar(500)")]
+        [MaxLength(1000)]
+        [Column(TypeName ="nvarchar(1000)")]
         public string Content { get; set; }
 
         [DefaultValue(0)]

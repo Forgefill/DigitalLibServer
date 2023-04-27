@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using BLL.Interfaces;
 using BLL.Model;
 using BLL.Validators;
@@ -8,31 +9,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
-    public class GenreServices:IGenreService
+    public class GenreService:IGenreService
     {
         private LibDbContext _context;
         private ValidatorRepo _validators;
         private IMapper _mapper;
 
-        public GenreServices(LibDbContext libDbContext, IMapper mapper, ValidatorRepo validatorRepo) 
+        public GenreService(LibDbContext libDbContext, IMapper mapper, ValidatorRepo validatorRepo) 
         { 
             _context = libDbContext;
             _validators = validatorRepo;
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<GenreModel>> GetGenreByIdAsync(int genreName)
+        public async Task<OperationResult<GenreModel>> GetGenreByIdAsync(int genreId)
         {
+
+            if (!_context.Genres.Any(x => x.Id == genreId))
+                return OperationResult<GenreModel>.Failture("The specified genre ID was not found in the database");
+
             try
             {
-                var genre = await _context.Genres.FirstAsync(x => x.Id == genreName);
+                var genre = await _context.Genres.FirstAsync(x => x.Id == genreId);
                 var result = _mapper.Map<GenreModel>(genre);
 
                 return OperationResult<GenreModel>.Success(result);
             }
             catch (Exception ex)
             {
-                return OperationResult<GenreModel>.Failture(ex.Message);
+                return OperationResult<GenreModel>.Failture("Internal database error");
             }
         }
 
@@ -47,16 +52,17 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
-                return OperationResult<List<GenreModel>>.Failture(ex.Message);
+                return OperationResult<List<GenreModel>>.Failture("Internal database error");
             }
         }
 
         public async Task<OperationResult<GenreModel>> CreateGenreAsync(GenreModel genreModel)
         {
             var validationResult = _validators.genreModelValidator.Validate(genreModel);
+
             if (!validationResult.IsValid)
             {
-                return OperationResult<GenreModel>.Failture(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
+                OperationResult<GenreModel>.Failture(validationResult.Errors.Select(e => e.ErrorMessage).ToArray());
             }
 
             try
@@ -69,12 +75,15 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
-                return OperationResult<GenreModel>.Failture(ex.Message);
+                return OperationResult<GenreModel>.Failture("Internal database error");
             }
         }
 
         public async Task<OperationResult<GenreModel>> DeleteGenreAsync(int genreId)
         {
+            if (!_context.Genres.Any(x => x.Id == genreId))
+                return OperationResult<GenreModel>.Failture("The specified genre ID was not found in the database");
+
             try
             {
                 var toDelete = await _context.Genres.FirstAsync(genre => genre.Id == genreId);
@@ -86,22 +95,29 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
-                return OperationResult<GenreModel>.Failture(ex.Message);
+                return OperationResult<GenreModel>.Failture("Internal database error");
             }
         }
 
         public async Task<OperationResult<GenreModel>> UpdateGenreAsync(int genreId, GenreModel genreModel)
         {
+            var errors = new List<string>();
             var validationResult = _validators.genreModelValidator.Validate(genreModel);
 
             if (genreModel.Id != genreId)
             {
-                return OperationResult<GenreModel>.Failture("Genre update failed. Invalid input provided. urlGenreId != genreId");
+                errors.Add("The ID in the request URL does not match the ID in the model");
             }
-            else if(!validationResult.IsValid)
+            if(!_context.Genres.Any(x=>x.Id == genreModel.Id))
             {
-                return OperationResult<GenreModel>.Failture(validationResult.Errors.Select(x => x.ErrorMessage).ToArray());
+                errors.Add("The specified genre ID was not found in the database");
             }
+            if(!validationResult.IsValid)
+            {
+                errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            }
+            if(errors.Count > 0) 
+                return OperationResult<GenreModel>.Failture(errors.ToArray());
             
             try
             {
@@ -113,7 +129,7 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
-                return OperationResult<GenreModel>.Failture(ex.Message);
+                return OperationResult<GenreModel>.Failture("Internal database error");
             }
         }
     }
