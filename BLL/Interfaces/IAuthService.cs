@@ -6,5 +6,7 @@ namespace BLL.Interfaces
     {
 
         public string GenerateToken(UserModel user);
+
+        public UserModel DecodeToken(string token);
     }
 }

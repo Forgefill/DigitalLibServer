@@ -1,4 +1,5 @@
-﻿namespace BLL.Model.Review
+﻿
+namespace BLL.Model.Review
 {
     public class ReviewInfoModel
     {

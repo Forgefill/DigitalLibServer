@@ -1,7 +1,5 @@
 ﻿using BLL.Model;
-using BLL.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BLL.Interfaces;
 using BLL.Model.Book;
@@ -12,34 +10,20 @@ namespace DigitalLibServer.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBookService bookService;
+        private readonly IBookService _bookService;
+        private readonly IImageService _imageService;
 
-        public BookController(IBookService _bookService) 
+        public BookController(IBookService bookService, IImageService imageService)
         {
-            bookService = _bookService;
+            _bookService = bookService;
+            _imageService = imageService;
         }
 
         [HttpGet("list")]
         [Authorize]
-        public async Task<IActionResult> GetBookList()
+        public async Task<IActionResult> GetBookList([FromQuery]BookFilters bookFilters, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var booksOperation = await bookService.GetBookListAsync();
-
-            if (!booksOperation.IsSuccess)
-            {
-                return BadRequest(new {errors = booksOperation.Errors });
-            }
-            else
-            {
-                return Ok(new {data = booksOperation.Entity});
-            }
-        }
-
-        [HttpGet("/{bookId}")]
-        [Authorize]
-        public async Task<IActionResult> GetBookById(int bookId)
-        {
-            var booksOperation = await bookService.GetBookByIdAsync(bookId);
+            var booksOperation = await _bookService.GetBookListAsync(bookFilters, page, pageSize);
 
             if (!booksOperation.IsSuccess)
             {
@@ -47,7 +31,23 @@ namespace DigitalLibServer.Controllers
             }
             else
             {
-                return Ok(new {data = booksOperation.Entity});
+                return Ok(new { data = booksOperation.Entity });
+            }
+        }
+
+        [HttpGet("/{bookId}")]
+        [Authorize]
+        public async Task<IActionResult> GetBookById(int bookId)
+        {
+            var booksOperation = await _bookService.GetBookByIdAsync(bookId);
+
+            if (!booksOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = booksOperation.Errors });
+            }
+            else
+            {
+                return Ok(new { data = booksOperation.Entity });
             }
         }
 
@@ -55,35 +55,21 @@ namespace DigitalLibServer.Controllers
         [Authorize]
         public async Task<IActionResult> GetBookByTitle(string title)
         {
-            var bookOperation = await bookService.GetBookByTitleAsync(title);
+            var bookOperation = await _bookService.GetBookByTitleAsync(title);
 
             if (!bookOperation.IsSuccess)
             {
-                return BadRequest(new {errors = bookOperation.Errors});
+                return BadRequest(new { errors = bookOperation.Errors });
             }
 
             return Ok(new { data = bookOperation.Entity });
-        }
-
-        [HttpGet("/image/{bookId}")]
-        [Authorize]
-        public async Task<IActionResult> GetImage(int bookId)
-        {
-            var imageOperation = await bookService.GetImageAsync(bookId);
-
-            if (!imageOperation.IsSuccess)
-            {
-                return BadRequest(new { errors = imageOperation.Errors });
-            }
-
-            return Ok(new { data = imageOperation.Entity });
         }
 
         [HttpDelete("/delete/{bookId}")]
         [Authorize]
         public async Task<IActionResult> DeleteBook(int bookId)
         {
-            var bookOperation = await bookService.DeleteBookAsync(bookId);
+            var bookOperation = await _bookService.DeleteBookAsync(bookId);
 
             if (!bookOperation.IsSuccess)
             {
@@ -97,28 +83,130 @@ namespace DigitalLibServer.Controllers
         [Authorize]
         public async Task<IActionResult> CreateBook(CreateBookModel createBookModel)
         {
-            var bookOperation = await bookService.CreateBookAsync(createBookModel);
+            var bookOperation = await _bookService.CreateBookAsync(createBookModel);
 
             if (!bookOperation.IsSuccess)
             {
                 return BadRequest(new { errors = bookOperation.Errors });
             }
 
-            return Ok(new {data = bookOperation.Entity});
+            return Ok(new { data = bookOperation.Entity });
         }
 
         [HttpPut("update/{bookId}")]
         [Authorize]
         public async Task<IActionResult> UpdateBook(int bookId, UpdateBookModel updateBookModel)
         {
-            var bookOperation = await bookService.UpdateBookAsync(bookId, updateBookModel);
+            var bookOperation = await _bookService.UpdateBookAsync(bookId, updateBookModel);
 
             if (!bookOperation.IsSuccess)
             {
-                return BadRequest(new {errors = bookOperation.Errors});
+                return BadRequest(new { errors = bookOperation.Errors });
             }
 
             return Ok(new { data = bookOperation.Entity });
+        }
+
+        [HttpGet("/image")]
+        [Authorize]
+        public async Task<IActionResult> GetImage(int bookId)
+        {
+            var imageOperation = await _imageService.GetImageAsync(bookId);
+
+            if (!imageOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = imageOperation.Errors });
+            }
+
+            return Ok(new { data = imageOperation.Entity });
+        }
+
+        [HttpDelete("image/delete")]
+        [Authorize]
+        public async Task<IActionResult> RemoveImage(int bookId)
+        {
+            var imageOperation = await _imageService.DeleteImageAsync(bookId);
+
+            if (!imageOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = imageOperation.Errors });
+            }
+
+            return Ok(new { data = imageOperation.Entity });
+        }
+
+        [HttpPost("image/add")]
+        [Authorize]
+        public async Task<IActionResult> RemoveImage([FromForm] IFormFile imageFile, int bookId)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                return BadRequest("Image file is required");
+            }
+            else if (!imageFile.ContentType.StartsWith("image/"))
+            {
+                return BadRequest("Only image files are allowed");
+            }
+
+            byte[] imageData;
+            using (var stream = new MemoryStream())
+            {
+                await imageFile.CopyToAsync(stream);
+                imageData = stream.ToArray();
+            }
+
+            var image = new ImageModel
+            {
+                BookId = bookId,
+                ContentType = imageFile.ContentType,
+                ImageData = imageData
+            };
+
+            var imageOperation = await _imageService.CreateImageAsync(image);
+
+            if (!imageOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = imageOperation.Errors });
+            }
+
+            return Ok(new { data = imageOperation.Entity });
+        }
+
+        [HttpPost("image/update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateImage([FromForm] IFormFile imageFile, int bookId)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+            {
+                return BadRequest("Image file is required");
+            }
+            else if (!imageFile.ContentType.StartsWith("image/"))
+            {
+                return BadRequest("Only image files are allowed");
+            }
+
+            byte[] imageData;
+            using (var stream = new MemoryStream())
+            {
+                await imageFile.CopyToAsync(stream);
+                imageData = stream.ToArray();
+            }
+
+            var image = new ImageModel
+            {
+                BookId = bookId,
+                ContentType = imageFile.ContentType,
+                ImageData = imageData
+            };
+
+            var imageOperation = await _imageService.UpdateImageAsync(bookId, image);
+
+            if (!imageOperation.IsSuccess)
+            {
+                return BadRequest(new { errors = imageOperation.Errors });
+            }
+
+            return Ok(new { data = imageOperation.Entity });
         }
     }
 }

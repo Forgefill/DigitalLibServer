@@ -6,34 +6,23 @@ namespace DAL.Data
 {
     public class LibDbContext : DbContext
     {
-
         public virtual DbSet<Book> Books { get; set; }
-
         public virtual DbSet<Genre> Genres { get; set; }
-
         public virtual DbSet<Chapter> Chapters { get; set; }
-
         public virtual DbSet<User> Users { get; set; }
-
         public virtual DbSet<Comment> Comments { get; set; }
-
         public virtual DbSet<Review> Reviews { get; set; }
-
         public virtual DbSet<Image> Images { get; set; }
-
         public virtual DbSet<BookGenre> BookGenres { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
 
-        IConfiguration _configuration { get; set; }
-
-        public LibDbContext(DbContextOptions<LibDbContext> options, IConfiguration config) : base(options)
+        public LibDbContext(DbContextOptions<LibDbContext> options) : base(options)
         {
-            _configuration = config;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("MSSQLSERVER"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -77,6 +66,11 @@ namespace DAL.Data
             {
                 entity.HasOne(x => x.User).WithMany(c => c.Reviews).HasForeignKey(f => f.UserId).IsRequired().OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(x => x.Book).WithMany(c => c.Reviews).HasForeignKey(f => f.BookId).IsRequired().OnDelete(DeleteBehavior.NoAction);
+            });
+
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.HasOne(b => b.Book).WithMany(r => r.Reports).HasForeignKey(x => x.BookId);
             });
 
         }

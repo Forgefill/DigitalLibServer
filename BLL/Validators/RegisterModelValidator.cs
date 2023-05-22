@@ -1,8 +1,6 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 using BLL.Model;
 using DAL.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Validators
 {

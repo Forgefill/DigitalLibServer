@@ -1,9 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Model.Chapter;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace DigitalLibServer.Controllers
 {

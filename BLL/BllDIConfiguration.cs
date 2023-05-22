@@ -33,6 +33,7 @@ namespace BLL
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IChapterService, ChapterService>();
+            services.AddScoped<IImageService, ImageService>();
             
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -40,11 +41,6 @@ namespace BLL
                 options.RequireHttpsMetadata = false;  //Delete before production
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    //ValidateIssuer = true,
-                    //ValidateAudience = true,
-                    //ValidateLifetime = true,
-                    //ValidIssuer = AuthOptions.ValidIssuer,
-                    //ValidAudience = AuthOptions.ValidAudience,
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = false,

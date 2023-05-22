@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,5 +21,8 @@ namespace DAL.Entities
 
         [DefaultValue(0)]
         public int Likes { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsReported { get; set; }
     }
 }

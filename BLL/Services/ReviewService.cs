@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
-using BLL.Model;
 using BLL.Model.Review;
 using BLL.Validators;
 using DAL.Data;

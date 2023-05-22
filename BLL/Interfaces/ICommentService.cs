@@ -1,6 +1,4 @@
-﻿
-
-using BLL.Model.Comment;
+﻿using BLL.Model.Comment;
 
 namespace BLL.Interfaces
 {

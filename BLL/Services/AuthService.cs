@@ -29,5 +29,42 @@ namespace BLL.Services
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
+
+        public UserModel DecodeToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            // Remove "Bearer " prefix from token string
+            token = token.Substring("Bearer ".Length).Trim();
+
+            try
+            {
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = false
+                };
+
+                SecurityToken validatedToken;
+                var claimsPrincipal = tokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
+
+                var userModel = new UserModel
+                {
+                    
+                    Email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value,
+                    Username = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value,
+                    Role = claimsPrincipal.FindFirst(ClaimTypes.Role)?.Value
+                };
+
+                return userModel;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Internal;
 using BLL.Interfaces;
 using BLL.Model;
 using BLL.Validators;

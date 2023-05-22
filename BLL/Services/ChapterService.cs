@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Interfaces;
 using BLL.Model.Chapter;
-using BLL.Model.Comment;
 using BLL.Validators;
 using DAL.Data;
 using DAL.Entities;

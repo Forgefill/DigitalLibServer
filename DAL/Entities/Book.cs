@@ -1,5 +1,4 @@
-﻿using DAL.Entities;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -39,12 +38,14 @@ namespace DAL.Entities
         public virtual ICollection<Chapter> Chapters { get; set; }  
         public virtual ICollection<BookGenre> BookGenres { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
 
         public Book() 
         { 
             Chapters = new HashSet<Chapter>();
             BookGenres= new HashSet<BookGenre>();
             Reviews = new HashSet<Review>();
+            Reports = new HashSet<Report>();
         }
     }
 }

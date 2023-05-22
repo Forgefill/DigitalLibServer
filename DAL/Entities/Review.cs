@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +15,7 @@ namespace DAL.Entities
         public virtual Book Book { get; set; }
 
         [Required]
-        [Column(TypeName ="nvarchar(5000)")]
+        [Column(TypeName ="nvarchar(max)")]
         public string Content { get; set; }
 
         [Required]
@@ -25,5 +24,8 @@ namespace DAL.Entities
 
         [DefaultValue(0)]
         public int Likes { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsReported { get; set; }
     }
 }

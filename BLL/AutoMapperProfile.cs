@@ -21,6 +21,7 @@ namespace BLL
             CreateMap<UpdateBookModel, Book>();
             CreateMap<Book, BookModel>();
             CreateMap<Image, ImageModel>();
+            CreateMap<ImageModel, Image>();
 
             CreateMap<Review, ReviewInfoModel>();
             CreateMap<ReviewModel, Review>();
